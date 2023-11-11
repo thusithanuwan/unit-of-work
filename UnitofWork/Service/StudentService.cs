@@ -22,7 +22,11 @@ public class StudentService: IStudentService
 
     public async Task<bool> Add(Student student)
     {
-        return await _studentUnitOfWork.Student.Add(student);
+        await _studentUnitOfWork.Student.Add(student);
+        await _studentUnitOfWork.CompleteAsync();
+
+        return true;
+
     }
 
     public async Task<string> getEmail(int id)

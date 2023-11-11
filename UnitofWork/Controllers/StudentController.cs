@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using UnitOfWork.Data;
 using UnitOfWork.Repository;
 using UnitOfWork.Repository.Repository;
+using UnitOfWork.Service;
 
 namespace UnitOfWork.Controllers;
 
@@ -9,24 +11,23 @@ namespace UnitOfWork.Controllers;
 [Route("[controller]")]
 public class StudentController : Controller
 {
-    private readonly IStudentUnitOfWork _StudentUnitOfWork;
+    private readonly IStudentService _studentService;
 
-    public StudentController(IStudentUnitOfWork studentUnitOfWork)
+    public StudentController(IStudentService studentService)
     {
-        _StudentUnitOfWork = studentUnitOfWork;
+        _studentService = studentService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok(await _StudentUnitOfWork.Student.GetAll());
+        return Ok(await _studentService.GetAll());
     }
 
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] Student student)
     {
-        await _StudentUnitOfWork.Student.Add(student);
-        await _StudentUnitOfWork.CompleteAsync();
-        return Ok();
+        await _studentService.Add(student);
+        return Ok(true);
     }
 }
